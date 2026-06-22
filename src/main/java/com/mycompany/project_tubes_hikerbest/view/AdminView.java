@@ -46,7 +46,6 @@ public class AdminView extends javax.swing.JFrame {
         panelContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(701, 402));
 
         panelSidebar.setBackground(new java.awt.Color(255, 255, 255));
 
