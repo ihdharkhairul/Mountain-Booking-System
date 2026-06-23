@@ -8,40 +8,24 @@ package com.mycompany.project_tubes_hikerbest.view;
  *
  * @author V16_E
  */
+import com.mycompany.project_tubes_hikerbest.controller.BookingController;
+import com.mycompany.project_tubes_hikerbest.controller.GunungController;
+
 public class DashboardPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form DashboardPanel
-     */
+    private GunungController gunungController = new GunungController();
+    private BookingController bookingController = new BookingController();
+
     public DashboardPanel() {
         initComponents();
         loadDataFromDB();
     }
 
     private void loadDataFromDB() {
-        try {
-            java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
-
-            // Total Gunung
-            java.sql.ResultSet rs1 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM gunung");
-            if (rs1.next()) lblTotalGunung.setText(String.valueOf(rs1.getInt("total")));
-
-            // Total Booking
-            java.sql.ResultSet rs2 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM booking");
-            if (rs2.next()) lblTotalBooking.setText(String.valueOf(rs2.getInt("total")));
-
-            // Pending
-            java.sql.ResultSet rs3 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM booking WHERE status='Menunggu'");
-            if (rs3.next()) lblTotalPending.setText(String.valueOf(rs3.getInt("total")));
-
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-        }
+        lblTotalGunung.setText(String.valueOf(gunungController.getTotalGunung()));
+        lblTotalBooking.setText(String.valueOf(bookingController.getTotalBooking()));
+        lblTotalPending.setText(String.valueOf(bookingController.getTotalPending()));
     }
-    
-    
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

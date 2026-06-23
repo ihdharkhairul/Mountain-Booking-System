@@ -8,13 +8,38 @@ package com.mycompany.project_tubes_hikerbest.view;
  *
  * @author V16_E
  */
-public class BookingManagementPanel extends javax.swing.JPanel {
+import com.mycompany.project_tubes_hikerbest.controller.BookingController;
+import com.mycompany.project_tubes_hikerbest.model.Booking;
+import java.util.List;
 
-    /**
-     * Creates new form BookingManagementPanel
-     */
+public class BookingManagementPanel extends javax.swing.JPanel {
+    
+    private BookingController bookingController = new BookingController();
+    private int selectedBookingId = -1;
+
     public BookingManagementPanel() {
         initComponents();
+        loadDataBooking();
+    }
+
+    private void loadDataBooking() {
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+            new String[]{"No", "Nama Pendaki", "Gunung", "Tanggal Naik", "Jumlah", "Status"}, 0
+        );
+        tabelBooking.setModel(model);
+
+        List<Booking> list = bookingController.getAllBooking();
+        int no = 1;
+        for (Booking b : list) {
+            model.addRow(new Object[]{
+                no++,
+                b.getNamaPendaki(),
+                b.getNamaGunung(),
+                b.getTanggalNaik(),
+                b.getJumlahOrang(),
+                b.getStatus()
+            });
+        }
     }
 
     /**
@@ -26,19 +51,155 @@ public class BookingManagementPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblJudul = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelBooking = new javax.swing.JTable();
+        lblStatus = new javax.swing.JLabel();
+        cmbStatus = new javax.swing.JComboBox<>();
+        btnUpdateStatus = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+
+        lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblJudul.setText("Manajemen Booking");
+
+        tabelBooking.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Nama", "Gunung", "Tanggal Naik", "Jumlah", "Status"
+            }
+        ));
+        tabelBooking.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelBookingMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelBooking);
+
+        lblStatus.setText("Status ");
+
+        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Menunggu", "Disetujui", "Ditolak" }));
+
+        btnUpdateStatus.setText("Update Status ");
+        btnUpdateStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateStatusActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnUpdateStatus)
+                                .addGap(53, 53, 53)
+                                .addComponent(btnHapus))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblStatus)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(155, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblJudul)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatus)
+                    .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdateStatus)
+                    .addComponent(btnHapus))
+                .addGap(25, 25, 25))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnUpdateStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStatusActionPerformed
+        if (selectedBookingId == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih booking dari tabel dulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String status = (String) cmbStatus.getSelectedItem();
+        if (bookingController.updateStatusBooking(selectedBookingId, status)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Status berhasil diupdate!");
+            selectedBookingId = -1;
+            tabelBooking.clearSelection();
+            loadDataBooking();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal update status!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateStatusActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        if (selectedBookingId == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih booking dari tabel dulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Yakin hapus booking ini?", "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+        if (bookingController.hapusBooking(selectedBookingId)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking berhasil dihapus!");
+            selectedBookingId = -1;
+            tabelBooking.clearSelection();
+            loadDataBooking();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal menghapus booking!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void tabelBookingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelBookingMouseClicked
+        int row = tabelBooking.getSelectedRow();
+        if (row == -1) return;
+
+        // ambil id booking berdasarkan urutan dari list
+        List<Booking> list = bookingController.getAllBooking();
+        if (row < list.size()) {
+            selectedBookingId = list.get(row).getId();
+            cmbStatus.setSelectedItem(list.get(row).getStatus());
+        }
+    }//GEN-LAST:event_tabelBookingMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnUpdateStatus;
+    private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblJudul;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JTable tabelBooking;
     // End of variables declaration//GEN-END:variables
 }

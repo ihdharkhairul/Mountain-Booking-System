@@ -8,7 +8,6 @@ package com.mycompany.project_tubes_hikerbest.model;
  *
  * @author V16_E
  */
-
 public class Booking {
     private int id;
     private String namaPendaki;

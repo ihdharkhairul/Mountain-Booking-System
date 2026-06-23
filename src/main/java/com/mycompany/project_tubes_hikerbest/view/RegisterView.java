@@ -145,28 +145,16 @@ public class RegisterView extends javax.swing.JFrame {
             return;
         }
 
-        try {
-            java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO users (nama, email, password, no_hp, role) VALUES (?,?,?,?,?)"
-            );
-            ps.setString(1, nama);
-            ps.setString(2, email);
-            ps.setString(3, password);
-            ps.setString(4, noHp);
-            ps.setString(5, "user");
-            ps.executeUpdate();
+        com.mycompany.project_tubes_hikerbest.controller.UserController uc =
+            new com.mycompany.project_tubes_hikerbest.controller.UserController();
+        boolean berhasil = uc.register(nama, email, password, noHp);
 
+        if (berhasil) {
             javax.swing.JOptionPane.showMessageDialog(this, "Pendaftaran berhasil! Silakan login.");
             new LoginView().setVisible(true);
             this.dispose();
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            if (e.getMessage().contains("Duplicate") || e.getMessage().contains("UNIQUE")) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Email sudah terdaftar!", "Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Gagal mendaftar: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Email sudah terdaftar!", "Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDaftarActionPerformed
 

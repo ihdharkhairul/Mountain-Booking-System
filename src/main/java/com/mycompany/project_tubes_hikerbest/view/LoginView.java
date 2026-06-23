@@ -124,29 +124,20 @@ public class LoginView extends javax.swing.JFrame {
             return;
         }
 
-        try {
-            java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE email=? AND password=?");
-            ps.setString(1, email);
-            ps.setString(2, password);
-            java.sql.ResultSet rs = ps.executeQuery();
+        com.mycompany.project_tubes_hikerbest.controller.UserController uc =
+            new com.mycompany.project_tubes_hikerbest.controller.UserController();
+        com.mycompany.project_tubes_hikerbest.model.User user = uc.login(email, password);
 
-            if (rs.next()) {
-                String role = rs.getString("role");
-                javax.swing.JOptionPane.showMessageDialog(this, "Login berhasil! Selamat datang, " + rs.getString("nama"));
-
-                if (role.equalsIgnoreCase("admin")) {
-                    new AdminView().setVisible(true);
-                } else {
-                    new UserView().setVisible(true);
-                }
-                this.dispose();
+        if (user != null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Login berhasil! Selamat datang, " + user.getNama());
+            if (user.getRole().equalsIgnoreCase("admin")) {
+                new AdminView().setVisible(true);
             } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Email atau Password salah!", "Login Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
+                new UserView().setVisible(true);
             }
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Email atau Password salah!", "Login Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 

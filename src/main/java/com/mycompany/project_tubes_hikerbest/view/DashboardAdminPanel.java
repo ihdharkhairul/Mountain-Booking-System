@@ -8,57 +8,48 @@ package com.mycompany.project_tubes_hikerbest.view;
  *
  * @author V16_E
  */
+import com.mycompany.project_tubes_hikerbest.controller.BookingController;
+import com.mycompany.project_tubes_hikerbest.controller.GunungController;
+import com.mycompany.project_tubes_hikerbest.controller.UserController;
+import com.mycompany.project_tubes_hikerbest.model.Booking;
+import java.util.List;
+
 public class DashboardAdminPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form DashboardAdminPanel
-     */
+    private GunungController gunungController = new GunungController();
+    private BookingController bookingController = new BookingController();
+    private UserController userController = new UserController();
+
     public DashboardAdminPanel() {
-    initComponents();
-    loadDataFromDB();
+        initComponents();
+        loadDataFromDB();
     }
 
     private void loadDataFromDB() {
-        try {
-            java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
+        // Card statistik
+        lblTotalGunung.setText(String.valueOf(gunungController.getTotalGunung()));
+        lblTotalUser.setText(String.valueOf(userController.getTotalUser()));
+        lblTotalBooking.setText(String.valueOf(bookingController.getTotalBooking()));
 
-            // Total Gunung
-            java.sql.ResultSet rs1 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM gunung");
-            if (rs1.next()) lblTotalGunung.setText(String.valueOf(rs1.getInt("total")));
+        // Tabel booking terbaru
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+            new String[]{"No", "Nama Pendaki", "Gunung", "Tanggal Naik", "Jumlah", "Status"}, 0
+        );
+        tabelBooking.setModel(model);
 
-            // Total User
-            java.sql.ResultSet rs2 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM users");
-            if (rs2.next()) lblTotalUser.setText(String.valueOf(rs2.getInt("total")));
-
-            // Total Booking
-            java.sql.ResultSet rs3 = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM booking");
-            if (rs3.next()) lblTotalBooking.setText(String.valueOf(rs3.getInt("total")));
-
-            // Tabel Booking Terbaru
-            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
-                new String[]{"No", "Nama", "Gunung", "Tanggal Naik", "Jumlah Pendaki", "Status"}, 0
-            );
-            tabelBooking.setModel(model);
-            java.sql.ResultSet rs4 = conn.createStatement().executeQuery(
-                "SELECT id, nama_pendaki, nama_gunung, tanggal_naik, jumlah_orang, status FROM booking ORDER BY id DESC LIMIT 10"
-            );
-            int no = 1;
-            while (rs4.next()) {
-                model.addRow(new Object[]{
-                    no++,
-                    rs4.getString("nama_pendaki"),
-                    rs4.getString("nama_gunung"),
-                    rs4.getString("tanggal_naik"),
-                    rs4.getInt("jumlah_orang"),
-                    rs4.getString("status")
-                });
-            }
-
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+        List<Booking> list = bookingController.getBookingTerbaru(10);
+        int no = 1;
+        for (Booking b : list) {
+            model.addRow(new Object[]{
+                no++,
+                b.getNamaPendaki(),
+                b.getNamaGunung(),
+                b.getTanggalNaik(),
+                b.getJumlahOrang(),
+                b.getStatus()
+            });
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

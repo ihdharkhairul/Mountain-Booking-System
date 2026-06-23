@@ -8,29 +8,30 @@ package com.mycompany.project_tubes_hikerbest.view;
  *
  * @author V16_E
  */
+import com.mycompany.project_tubes_hikerbest.controller.BookingController;
+import com.mycompany.project_tubes_hikerbest.controller.GunungController;
+import com.mycompany.project_tubes_hikerbest.model.Booking;
+import com.mycompany.project_tubes_hikerbest.model.Gunung;
+import java.util.List;
+
 public class BookingPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form BookingPanel
-     */
-public BookingPanel() {
-    initComponents();
-    loadGunung(); // isi combobox dari DB
-}
+    private BookingController bookingController = new BookingController();
+    private GunungController gunungController = new GunungController();
 
-private void loadGunung() {
-    try {
-        java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
-        java.sql.ResultSet rs = conn.createStatement().executeQuery("SELECT nama, lokasi FROM gunung WHERE status='Aktif'");
+    public BookingPanel() {
+        initComponents();
+        loadGunung();
+    }
+
+    private void loadGunung() {
         cmbGunung.removeAllItems();
         cmbGunung.addItem("Pilih Gunung (Lokasi)");
-        while (rs.next()) {
-            cmbGunung.addItem(rs.getString("nama") + " (" + rs.getString("lokasi") + ")");
+        List<Gunung> list = gunungController.getAllGunung();
+        for (Gunung g : list) {
+            cmbGunung.addItem(g.getNama() + " (" + g.getLokasi() + ")");
         }
-    } catch (java.sql.SQLException e) {
-        e.printStackTrace();
     }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -146,28 +147,22 @@ private void loadGunung() {
             return;
         }
 
-        // ambil nama gunung saja, tanpa "(Lokasi)"
         String namaGunung = gunungPilihan.split(" \\(")[0];
 
-        try {
-            java.sql.Connection conn = com.mycompany.project_tubes_hikerbest.database.DatabaseConnection.getConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO booking (nama_pendaki, nama_gunung, tanggal_naik, tanggal_turun, jumlah_orang, total_harga, status) VALUES (?,?,?,?,?,?,?)"
-            );
-            ps.setString(1, nama);
-            ps.setString(2, namaGunung);
-            ps.setString(3, tanggal);
-            ps.setString(4, tanggal);
-            ps.setInt(5, Integer.parseInt(jumlah));
-            ps.setDouble(6, 0);
-            ps.setString(7, "Menunggu");
-            ps.executeUpdate();
+        Booking b = new Booking();
+        b.setNamaPendaki(nama);
+        b.setNamaGunung(namaGunung);
+        b.setTanggalNaik(tanggal);
+        b.setJumlahOrang(Integer.parseInt(jumlah));
+        b.setTotalHarga(0);
+        b.setStatus("Menunggu");
+        b.setCatatan("");
 
+        if (bookingController.tambahBooking(b)) {
             javax.swing.JOptionPane.showMessageDialog(this, "Booking berhasil disimpan!");
             btnBatalActionPerformed(evt);
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan booking!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
