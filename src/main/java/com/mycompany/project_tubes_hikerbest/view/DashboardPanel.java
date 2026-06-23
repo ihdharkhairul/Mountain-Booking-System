@@ -10,6 +10,8 @@ package com.mycompany.project_tubes_hikerbest.view;
  */
 import com.mycompany.project_tubes_hikerbest.controller.BookingController;
 import com.mycompany.project_tubes_hikerbest.controller.GunungController;
+import com.mycompany.project_tubes_hikerbest.model.Booking;
+import java.util.List;
 
 public class DashboardPanel extends javax.swing.JPanel {
 
@@ -22,9 +24,29 @@ public class DashboardPanel extends javax.swing.JPanel {
     }
 
     private void loadDataFromDB() {
+        // Card statistik
         lblTotalGunung.setText(String.valueOf(gunungController.getTotalGunung()));
         lblTotalBooking.setText(String.valueOf(bookingController.getTotalBooking()));
         lblTotalPending.setText(String.valueOf(bookingController.getTotalPending()));
+
+        // Tabel booking saya
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+            new String[]{"No", "Nama Pendaki", "Gunung", "Tanggal Naik", "Jumlah", "Status"}, 0
+        );
+        tabelBooking.setModel(model);
+
+        List<Booking> list = bookingController.getBookingTerbaru(10);
+        int no = 1;
+        for (Booking b : list) {
+            model.addRow(new Object[]{
+                no++,
+                b.getNamaPendaki(),
+                b.getNamaGunung(),
+                b.getTanggalNaik(),
+                b.getJumlahOrang(),
+                b.getStatus()
+            });
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,6 +67,9 @@ public class DashboardPanel extends javax.swing.JPanel {
         cardPending = new javax.swing.JPanel();
         lblKeteranganPending = new javax.swing.JLabel();
         lblTotalPending = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelBooking = new javax.swing.JTable();
+        lblBookingSaya = new javax.swing.JLabel();
 
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblJudul.setText("Selamat Datang di HikerBest");
@@ -141,21 +166,47 @@ public class DashboardPanel extends javax.swing.JPanel {
                 .addGap(23, 23, 23))
         );
 
+        tabelBooking.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabelBooking);
+
+        lblBookingSaya.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblBookingSaya.setText("Booking saya");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblJudul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cardBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblJudul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cardBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 57, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(lblBookingSaya)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +218,10 @@ public class DashboardPanel extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(lblBookingSaya)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -176,6 +230,8 @@ public class DashboardPanel extends javax.swing.JPanel {
     private javax.swing.JPanel cardBooking;
     private javax.swing.JPanel cardGunung;
     private javax.swing.JPanel cardPending;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblBookingSaya;
     private javax.swing.JLabel lblJudul;
     private javax.swing.JLabel lblKeteranganBooking;
     private javax.swing.JLabel lblKeteranganGunung;
@@ -183,5 +239,6 @@ public class DashboardPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblTotalBooking;
     private javax.swing.JLabel lblTotalGunung;
     private javax.swing.JLabel lblTotalPending;
+    private javax.swing.JTable tabelBooking;
     // End of variables declaration//GEN-END:variables
 }

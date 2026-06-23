@@ -51,8 +51,6 @@ public class RegisterView extends javax.swing.JFrame {
 
         lblNoHp.setText("No HP");
 
-        txtPassword.setText("jPasswordField1");
-
         btnDaftar.setText("Daftar");
         btnDaftar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
