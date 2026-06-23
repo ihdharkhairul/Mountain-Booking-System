@@ -41,6 +41,7 @@ public class UserView extends javax.swing.JFrame {
         btnDashboard = new javax.swing.JButton();
         btnBooking = new javax.swing.JButton();
         btnGunung = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         panelContent = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -70,6 +71,13 @@ public class UserView extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelSidebarLayout = new javax.swing.GroupLayout(panelSidebar);
         panelSidebar.setLayout(panelSidebarLayout);
         panelSidebarLayout.setHorizontalGroup(
@@ -79,7 +87,8 @@ public class UserView extends javax.swing.JFrame {
                 .addGroup(panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDashboard, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                     .addComponent(btnBooking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGunung, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnGunung, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelSidebarLayout.setVerticalGroup(
@@ -91,7 +100,9 @@ public class UserView extends javax.swing.JFrame {
                 .addComponent(btnBooking)
                 .addGap(18, 18, 18)
                 .addComponent(btnGunung)
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addGap(20, 20, 20))
         );
 
         panelContent.setBackground(new java.awt.Color(255, 255, 255));
@@ -129,10 +140,9 @@ public class UserView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -149,6 +159,15 @@ public class UserView extends javax.swing.JFrame {
     private void btnGunungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGunungActionPerformed
         setPanel(new GunungPanel());
     }//GEN-LAST:event_btnGunungActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Yakin ingin logout?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            new LoginView().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,6 +208,7 @@ public class UserView extends javax.swing.JFrame {
     private javax.swing.JButton btnBooking;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnGunung;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panelContent;
     private javax.swing.JPanel panelSidebar;
