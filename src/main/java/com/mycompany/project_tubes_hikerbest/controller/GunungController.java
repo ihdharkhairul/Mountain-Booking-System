@@ -14,7 +14,43 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GunungController {
+public class GunungController implements ICrudController<Gunung> {
+
+    @Override
+    public List<Gunung> getAll() { return getAllGunung(); }
+
+    @Override
+    public boolean tambah(Gunung g) { return tambahGunung(g); }
+
+    @Override
+    public boolean update(Gunung g) { return updateGunung(g); }
+
+    @Override
+    public boolean hapus(int id) { return hapusGunung(id); }
+
+    @Override
+    public Gunung getById(int id) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM gunung WHERE id=?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Gunung(
+                    rs.getInt("id"),
+                    rs.getString("nama"),
+                    rs.getString("lokasi"),
+                    rs.getInt("ketinggian"),
+                    rs.getDouble("harga"),
+                    rs.getString("deskripsi"),
+                    rs.getString("status")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public List<Gunung> getAllGunung() {
         List<Gunung> list = new ArrayList<>();

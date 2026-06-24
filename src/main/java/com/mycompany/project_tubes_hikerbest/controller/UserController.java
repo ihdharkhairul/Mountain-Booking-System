@@ -14,8 +14,43 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserController {
+public class UserController implements ICrudController<User> {
 
+    @Override
+    public List<User> getAll() { return getAllUsers(); }
+
+    @Override
+    public boolean tambah(User u) { return tambahUser(u); }
+
+    @Override
+    public boolean update(User u) { return updateUser(u); }
+
+    @Override
+    public boolean hapus(int id) { return hapusUser(id); }
+
+    @Override
+    public User getById(int id) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE id=?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                    rs.getInt("id"),
+                    rs.getString("nama"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("no_hp"),
+                    rs.getString("role")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     // Ambil semua user
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();

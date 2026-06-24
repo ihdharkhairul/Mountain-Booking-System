@@ -8,8 +8,7 @@ package com.mycompany.project_tubes_hikerbest.model;
  *
  * @author V16_E
  */
-public class Booking {
-    private int id;
+public class Booking extends BaseEntity {
     private String namaPendaki;
     private String namaGunung;
     private String tanggalNaik;
@@ -23,7 +22,7 @@ public class Booking {
 
     public Booking(int id, String namaPendaki, String namaGunung, String tanggalNaik,
                    int jumlahOrang, double totalHarga, String status, String catatan) {
-        this.id = id;
+        setId(id);
         this.namaPendaki = namaPendaki;
         this.namaGunung = namaGunung;
         this.tanggalNaik = tanggalNaik;
@@ -33,8 +32,17 @@ public class Booking {
         this.catatan = catatan;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Override dari BaseEntity
+    @Override
+    public String getInfo() {
+        return "Booking: " + namaPendaki + " | Gunung: " + namaGunung + " | Tanggal: " + tanggalNaik + " | Status: " + status;
+    }
+
+    // Override toString
+    @Override
+    public String toString() {
+        return namaPendaki + " - " + namaGunung + " (" + status + ")";
+    }
 
     public String getNamaPendaki() { return namaPendaki; }
     public void setNamaPendaki(String namaPendaki) { this.namaPendaki = namaPendaki; }

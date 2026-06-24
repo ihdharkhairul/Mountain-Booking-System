@@ -8,8 +8,8 @@ package com.mycompany.project_tubes_hikerbest.model;
  *
  * @author V16_E
  */
-public class User {
-    private int id;
+
+public class User extends BaseEntity {
     private String nama;
     private String email;
     private String password;
@@ -20,7 +20,7 @@ public class User {
     }
 
     public User(int id, String nama, String email, String password, String noHp, String role) {
-        this.id = id;
+        setId(id);
         this.nama = nama;
         this.email = email;
         this.password = password;
@@ -28,8 +28,17 @@ public class User {
         this.role = role;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Override dari BaseEntity
+    @Override
+    public String getInfo() {
+        return "User: " + nama + " | Email: " + email + " | Role: " + role;
+    }
+
+    // Override toString
+    @Override
+    public String toString() {
+        return nama + " (" + role + ")";
+    }
 
     public String getNama() { return nama; }
     public void setNama(String nama) { this.nama = nama; }

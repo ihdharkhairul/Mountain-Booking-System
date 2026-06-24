@@ -8,8 +8,7 @@ package com.mycompany.project_tubes_hikerbest.model;
  *
  * @author V16_E
  */
-public class Gunung {
-    private int id;
+public class Gunung extends BaseEntity {
     private String nama, lokasi, deskripsi, status;
     private int ketinggian;
     private double harga;
@@ -18,7 +17,7 @@ public class Gunung {
     }
 
     public Gunung(int id, String nama, String lokasi, int ketinggian, double harga, String deskripsi, String status) {
-        this.id = id;
+        setId(id);
         this.nama = nama;
         this.lokasi = lokasi;
         this.ketinggian = ketinggian;
@@ -27,8 +26,17 @@ public class Gunung {
         this.status = status;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    //dari BaseEntity
+    @Override
+    public String getInfo() {
+        return "Gunung: " + nama + " | Lokasi: " + lokasi + " | Ketinggian: " + ketinggian + " mdpl";
+    }
+
+    //toString
+    @Override
+    public String toString() {
+        return nama + " (" + lokasi + ")";
+    }
 
     public String getNama() { return nama; }
     public void setNama(String nama) { this.nama = nama; }

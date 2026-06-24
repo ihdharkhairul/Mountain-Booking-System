@@ -14,8 +14,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingController {
+public class BookingController implements ICrudController<Booking> {
 
+    @Override
+    public List<Booking> getAll() { return getAllBooking(); }
+
+    @Override
+    public boolean tambah(Booking b) { return tambahBooking(b); }
+
+    @Override
+    public boolean update(Booking b) { return updateBooking(b); }
+
+    @Override
+    public boolean hapus(int id) { return hapusBooking(id); }
+
+    @Override
+    public Booking getById(int id) { return getBookingById(id); }
+    
     public List<Booking> getAllBooking() {
         List<Booking> list = new ArrayList<>();
         try {
