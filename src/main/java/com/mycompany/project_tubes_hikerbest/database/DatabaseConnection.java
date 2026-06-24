@@ -45,7 +45,6 @@ public class DatabaseConnection {
                 ")"
             );
 
-            // === TABEL BOOKING ===
             stmt.execute(
                 "CREATE TABLE IF NOT EXISTS booking(" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -61,7 +60,6 @@ public class DatabaseConnection {
                 ")"
             );
 
-            // === TABEL USERS ===
             stmt.execute(
                 "CREATE TABLE IF NOT EXISTS users(" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -72,8 +70,13 @@ public class DatabaseConnection {
                 "role VARCHAR(20) DEFAULT 'user'" +
                 ")"
             );
+            
+            ResultSet rsAdmin = stmt.executeQuery("SELECT COUNT(*) as cnt FROM users WHERE role='admin'");
+            if (rsAdmin.next() && rsAdmin.getInt("cnt") == 0) {
+               stmt.execute("INSERT INTO users (nama, email, password, no_hp, role) VALUES " +
+               "('Admin HikerBest', 'admin@hikerbest.com', 'admin123', '081234567890', 'admin')");
+            }
 
-            // === ISI DUMMY GUNUNG JIKA KOSONG ===
             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as cnt FROM gunung");
             if (rs.next() && rs.getInt("cnt") == 0) {
                 stmt.execute("INSERT INTO gunung (nama,lokasi,ketinggian,harga,deskripsi,status) VALUES ('Burangrang','Bandung Barat',2064,10000,'Gunung Burangrang menawarkan trek yang cukup menantang dengan pemandangan Gunung Tangkuban Perahu.','Aktif')");
