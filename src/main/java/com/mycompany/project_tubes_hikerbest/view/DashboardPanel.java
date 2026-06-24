@@ -17,6 +17,8 @@ public class DashboardPanel extends javax.swing.JPanel {
 
     private GunungController gunungController = new GunungController();
     private BookingController bookingController = new BookingController();
+    private int selectedBookingId = -1;
+    private String selectedStatus = "";
 
     public DashboardPanel() {
         initComponents();
@@ -24,12 +26,10 @@ public class DashboardPanel extends javax.swing.JPanel {
     }
 
     private void loadDataFromDB() {
-        // Card statistik
         lblTotalGunung.setText(String.valueOf(gunungController.getTotalGunung()));
         lblTotalBooking.setText(String.valueOf(bookingController.getTotalBooking()));
         lblTotalPending.setText(String.valueOf(bookingController.getTotalPending()));
 
-        // Tabel booking saya
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
             new String[]{"No", "Nama Pendaki", "Gunung", "Tanggal Naik", "Jumlah", "Status"}, 0
         );
@@ -70,6 +70,8 @@ public class DashboardPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelBooking = new javax.swing.JTable();
         lblBookingSaya = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
 
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblJudul.setText("Selamat Datang di HikerBest");
@@ -177,10 +179,29 @@ public class DashboardPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabelBooking.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelBookingMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelBooking);
 
         lblBookingSaya.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblBookingSaya.setText("Booking saya");
+
+        btnUpdate.setText("Update Booking");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setText("Hapus Booking");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -189,24 +210,31 @@ public class DashboardPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblJudul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cardBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 57, Short.MAX_VALUE)))
+                                .addGap(61, 61, 61)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblJudul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cardBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(lblBookingSaya)
+                                .addGap(77, 77, 77)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 57, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(lblBookingSaya)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,15 +246,93 @@ public class DashboardPanel extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(cardGunung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cardPending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(lblBookingSaya)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBookingSaya)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnHapus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (selectedBookingId == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih booking dari tabel dulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!selectedStatus.equals("Menunggu")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Hanya booking dengan status 'Menunggu' yang bisa diupdate!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // ambil data booking yang dipilih
+        Booking b = bookingController.getBookingById(selectedBookingId);
+        if (b == null) return;
+
+        // dialog input update
+        javax.swing.JTextField txtTanggal = new javax.swing.JTextField(b.getTanggalNaik());
+        javax.swing.JTextField txtJumlah = new javax.swing.JTextField(String.valueOf(b.getJumlahOrang()));
+
+        Object[] fields = {
+            "Tanggal Naik:", txtTanggal,
+            "Jumlah Orang:", txtJumlah
+        };
+
+        int result = javax.swing.JOptionPane.showConfirmDialog(this, fields, "Update Booking", javax.swing.JOptionPane.OK_CANCEL_OPTION);
+        if (result != javax.swing.JOptionPane.OK_OPTION) return;
+
+        b.setTanggalNaik(txtTanggal.getText().trim());
+        b.setJumlahOrang(Integer.parseInt(txtJumlah.getText().trim()));
+
+        if (bookingController.updateBooking(b)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking berhasil diupdate!");
+            selectedBookingId = -1;
+            selectedStatus = "";
+            loadDataFromDB();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal mengupdate booking!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        if (selectedBookingId == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Pilih booking dari tabel dulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+        }
+        if (!selectedStatus.equals("Menunggu")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Hanya booking dengan status 'Menunggu' yang bisa dihapus!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Yakin batalkan booking ini?", "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+        if (bookingController.hapusBooking(selectedBookingId)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking berhasil dibatalkan!");
+            selectedBookingId = -1;
+            selectedStatus = "";
+            loadDataFromDB();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal membatalkan booking!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void tabelBookingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelBookingMouseClicked
+        int row = tabelBooking.getSelectedRow();
+        if (row == -1) return;
+
+        List<Booking> list = bookingController.getBookingTerbaru(10);
+        if (row < list.size()) {
+            selectedBookingId = list.get(row).getId();
+            selectedStatus = list.get(row).getStatus();
+        }
+    }//GEN-LAST:event_tabelBookingMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JPanel cardBooking;
     private javax.swing.JPanel cardGunung;
     private javax.swing.JPanel cardPending;

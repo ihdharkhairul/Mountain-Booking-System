@@ -74,6 +74,24 @@ public class BookingController {
             return false;
         }
     }
+    
+    public boolean updateBooking(Booking b) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                "UPDATE booking SET tanggal_naik=?, tanggal_turun=?, jumlah_orang=? WHERE id=?"
+            );
+            ps.setString(1, b.getTanggalNaik());
+            ps.setString(2, b.getTanggalNaik());
+            ps.setInt(3, b.getJumlahOrang());
+            ps.setInt(4, b.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public boolean hapusBooking(int id) {
         try {
