@@ -26,16 +26,23 @@ public class DashboardPanel extends javax.swing.JPanel {
     }
 
     private void loadDataFromDB() {
+        com.mycompany.project_tubes_hikerbest.model.User u =
+            com.mycompany.project_tubes_hikerbest.util.Session.getCurrentUser();
+        String namaPendaki = (u != null) ? u.getNama() : "";
+
         lblTotalGunung.setText(String.valueOf(gunungController.getTotalGunung()));
-        lblTotalBooking.setText(String.valueOf(bookingController.getTotalBooking()));
-        lblTotalPending.setText(String.valueOf(bookingController.getTotalPending()));
+
+        List<Booking> list = bookingController.getBookingByNamaPendaki(namaPendaki);
+
+        lblTotalBooking.setText(String.valueOf(list.size()));
+        long totalPending = list.stream().filter(b -> "Menunggu".equalsIgnoreCase(b.getStatus())).count();
+        lblTotalPending.setText(String.valueOf(totalPending));
 
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
             new String[]{"No", "Nama Pendaki", "Gunung", "Tanggal Naik", "Jumlah", "Status"}, 0
         );
         tabelBooking.setModel(model);
 
-        List<Booking> list = bookingController.getBookingTerbaru(10);
         int no = 1;
         for (Booking b : list) {
             model.addRow(new Object[]{
@@ -224,8 +231,8 @@ public class DashboardPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(14, 14, 14)
                                 .addComponent(lblBookingSaya)
-                                .addGap(77, 77, 77)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(54, 54, 54)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 57, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -322,7 +329,11 @@ public class DashboardPanel extends javax.swing.JPanel {
         int row = tabelBooking.getSelectedRow();
         if (row == -1) return;
 
-        List<Booking> list = bookingController.getBookingTerbaru(10);
+        com.mycompany.project_tubes_hikerbest.model.User u =
+            com.mycompany.project_tubes_hikerbest.util.Session.getCurrentUser();
+        String namaPendaki = (u != null) ? u.getNama() : "";
+
+        List<Booking> list = bookingController.getBookingByNamaPendaki(namaPendaki);
         if (row < list.size()) {
             selectedBookingId = list.get(row).getId();
             selectedStatus = list.get(row).getStatus();

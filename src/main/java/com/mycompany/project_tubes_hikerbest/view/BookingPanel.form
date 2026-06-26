@@ -136,7 +136,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblNama">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Nama"/>
+        <Property name="text" type="java.lang.String" value="Nama Pendaki (Akun)"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNama">

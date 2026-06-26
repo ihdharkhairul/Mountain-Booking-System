@@ -16,6 +16,14 @@ public class AdminView extends javax.swing.JFrame {
      */
    public AdminView() {
     initComponents();
+    if (!com.mycompany.project_tubes_hikerbest.util.Session.isAdmin()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Akses ditolak! Khusus admin.", "Akses Ditolak", javax.swing.JOptionPane.WARNING_MESSAGE);
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginView().setVisible(true);
+            this.dispose();
+        });
+        return;
+    }
     setPanel(new DashboardAdminPanel());
     }
 
@@ -95,14 +103,13 @@ public class AdminView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBooking, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                    .addComponent(btnGunung, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelSidebarLayout.createSequentialGroup()
-                        .addGroup(panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblAppName)
-                            .addComponent(btnBooking, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                            .addComponent(btnGunung, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 9, Short.MAX_VALUE)))
+                        .addComponent(lblAppName)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelSidebarLayout.setVerticalGroup(
@@ -129,7 +136,7 @@ public class AdminView extends javax.swing.JFrame {
         panelContent.setLayout(panelContentLayout);
         panelContentLayout.setHorizontalGroup(
             panelContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
+            .addGap(0, 493, Short.MAX_VALUE)
         );
         panelContentLayout.setVerticalGroup(
             panelContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,6 +184,7 @@ public class AdminView extends javax.swing.JFrame {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
             "Yakin ingin logout?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
             if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            com.mycompany.project_tubes_hikerbest.util.Session.logout();
             new LoginView().setVisible(true);
             this.dispose();
         }

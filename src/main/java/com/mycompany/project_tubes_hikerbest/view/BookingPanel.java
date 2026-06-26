@@ -22,6 +22,19 @@ public class BookingPanel extends javax.swing.JPanel {
     public BookingPanel() {
         initComponents();
         loadGunung();
+        isiNamaDariSession();
+    }
+
+    private void isiNamaDariSession() {
+        com.mycompany.project_tubes_hikerbest.model.User u =
+            com.mycompany.project_tubes_hikerbest.util.Session.getCurrentUser();
+        if (u != null) {
+            txtNama.setText(u.getNama());
+        }
+        // Nama pendaki diambil otomatis dari akun yang login, tidak boleh diubah manual
+        txtNama.setEditable(false);
+        txtNama.setFocusable(false);
+        txtNama.setBackground(new java.awt.Color(235, 235, 235));
     }
 
     private void loadGunung() {
@@ -64,7 +77,7 @@ public class BookingPanel extends javax.swing.JPanel {
 
         lblJumlah.setText("Jumlah Pendaki");
 
-        lblNama.setText("Nama");
+        lblNama.setText("Nama Pendaki (Akun)");
 
         btnBatal.setText("Batal");
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
@@ -137,24 +150,49 @@ public class BookingPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        String nama = txtNama.getText().trim();
+        com.mycompany.project_tubes_hikerbest.model.User u =
+            com.mycompany.project_tubes_hikerbest.util.Session.getCurrentUser();
+        if (u == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Sesi login tidak ditemukan. Silakan login ulang!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String nama = u.getNama();
         String gunungPilihan = (String) cmbGunung.getSelectedItem();
         String tanggal = txtTanggal.getText().trim();
         String jumlah = txtJumlah.getText().trim();
 
-        if (nama.isEmpty() || gunungPilihan.equals("Pilih Gunung (Lokasi)") || tanggal.isEmpty() || jumlah.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+        if (gunungPilihan.equals("Pilih Gunung (Lokasi)") || tanggal.isEmpty() || jumlah.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gunung, Tanggal, dan Jumlah Pendaki wajib diisi!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int jumlahOrang;
+        try {
+            jumlahOrang = Integer.parseInt(jumlah);
+            if (jumlahOrang <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Jumlah pendaki harus lebih dari 0!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Jumlah pendaki harus berupa angka!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String namaGunung = gunungPilihan.split(" \\(")[0];
 
+        // Hitung total harga berdasarkan harga per orang dari data gunung
+        double totalHarga = 0;
+        Gunung gunungDipilih = gunungController.getGunungByNama(namaGunung);
+        if (gunungDipilih != null) {
+            totalHarga = gunungDipilih.getHarga() * jumlahOrang;
+        }
+
         Booking b = new Booking();
         b.setNamaPendaki(nama);
         b.setNamaGunung(namaGunung);
         b.setTanggalNaik(tanggal);
-        b.setJumlahOrang(Integer.parseInt(jumlah));
-        b.setTotalHarga(0);
+        b.setJumlahOrang(jumlahOrang);
+        b.setTotalHarga(totalHarga);
         b.setStatus("Menunggu");
         b.setCatatan("");
 
@@ -167,7 +205,6 @@ public class BookingPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
-        txtNama.setText("");
         txtTanggal.setText("");
         txtJumlah.setText("");
         cmbGunung.setSelectedIndex(0);

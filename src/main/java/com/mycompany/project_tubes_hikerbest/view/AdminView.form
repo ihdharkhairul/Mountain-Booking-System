@@ -56,16 +56,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnLogout" max="32767" attributes="0"/>
+                      <Component id="btnBooking" alignment="0" pref="153" max="32767" attributes="0"/>
+                      <Component id="btnGunung" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="lblAppName" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnBooking" alignment="0" pref="153" max="32767" attributes="0"/>
-                              <Component id="btnGunung" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnUser" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnDashboard" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
+                          <Component id="lblAppName" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="btnUser" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnDashboard" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -152,7 +150,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="484" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="493" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

@@ -24,6 +24,16 @@ public class UserView extends javax.swing.JFrame {
     }
     public UserView() {
         initComponents();
+        if (!com.mycompany.project_tubes_hikerbest.util.Session.isLoggedIn()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silakan login terlebih dahulu!", "Akses Ditolak", javax.swing.JOptionPane.WARNING_MESSAGE);
+            java.awt.EventQueue.invokeLater(() -> {
+                new LoginView().setVisible(true);
+                this.dispose();
+            });
+            return;
+        }
+        com.mycompany.project_tubes_hikerbest.model.User u = com.mycompany.project_tubes_hikerbest.util.Session.getCurrentUser();
+        jLabel2.setText("HikerBest - Selamat datang, " + u.getNama());
         setPanel(new DashboardPanel());
         
     }
@@ -164,6 +174,7 @@ public class UserView extends javax.swing.JFrame {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
             "Yakin ingin logout?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
             if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            com.mycompany.project_tubes_hikerbest.util.Session.logout();
             new LoginView().setVisible(true);
             this.dispose();
         }

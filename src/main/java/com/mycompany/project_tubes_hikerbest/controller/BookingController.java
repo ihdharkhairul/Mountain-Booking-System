@@ -63,7 +63,7 @@ public class BookingController implements ICrudController<Booking> {
             ps.setString(1, b.getNamaPendaki());
             ps.setString(2, b.getNamaGunung());
             ps.setString(3, b.getTanggalNaik());
-            ps.setString(4, b.getTanggalNaik()); // tanggal turun = tanggal naik sementara
+            ps.setString(4, b.getTanggalNaik());
             ps.setInt(5, b.getJumlahOrang());
             ps.setDouble(6, b.getTotalHarga());
             ps.setString(7, b.getStatus() == null ? "Menunggu" : b.getStatus());
@@ -175,6 +175,34 @@ public class BookingController implements ICrudController<Booking> {
                 "SELECT * FROM booking ORDER BY id DESC LIMIT ?"
             );
             ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Booking(
+                    rs.getInt("id"),
+                    rs.getString("nama_pendaki"),
+                    rs.getString("nama_gunung"),
+                    rs.getString("tanggal_naik"),
+                    rs.getInt("jumlah_orang"),
+                    rs.getDouble("total_harga"),
+                    rs.getString("status"),
+                    rs.getString("catatan")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Ambil semua booking milik satu nama pendaki (untuk "Booking Saya" di dashboard user)
+    public List<Booking> getBookingByNamaPendaki(String namaPendaki) {
+        List<Booking> list = new ArrayList<>();
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                "SELECT * FROM booking WHERE nama_pendaki=? ORDER BY id DESC"
+            );
+            ps.setString(1, namaPendaki);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Booking(

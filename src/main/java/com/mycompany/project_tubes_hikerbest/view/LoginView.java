@@ -127,6 +127,7 @@ public class LoginView extends javax.swing.JFrame {
         com.mycompany.project_tubes_hikerbest.model.User user = uc.login(email, password);
 
         if (user != null) {
+            com.mycompany.project_tubes_hikerbest.util.Session.login(user);
             javax.swing.JOptionPane.showMessageDialog(this, "Login berhasil! Selamat datang, " + user.getNama());
             if (user.getRole().equalsIgnoreCase("admin")) {
                 new AdminView().setVisible(true);
